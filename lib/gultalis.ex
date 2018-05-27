@@ -1,18 +1,8 @@
 defmodule Gultalis do
-  @moduledoc """
-  Documentation for Gultalis.
-  """
+  use Application
 
-  @doc """
-  Hello world.
-
-  ## Examples
-
-      iex> Gultalis.hello
-      :world
-
-  """
-  def hello do
-    :world
+  def start(_type, _args) do
+    token = Application.get_env(:gultalis, :api_key)
+    {:ok, gultalis} = Slack.Bot.start_link(Gultalis.Slack, [], token)
   end
 end
