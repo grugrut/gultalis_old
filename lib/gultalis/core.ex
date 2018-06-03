@@ -6,13 +6,15 @@ defmodule Gultalis.Slack do
     {:ok, state}
   end
 
-  def handle_message(message = %{type: "message"}, slack, state) do
-    reply = "Received #{length(state)} messages so far"
-    send_message(reply, message.channel, slack)
-    {:ok, state ++ [message.text]}
+  def handle_event(message = %{type: "message"}, slack, state) do
+    IO.puts message.text
+    if message.text == "Hi" do
+      send_message("Hello to you too!", message.channel, slack)
+    end
+    {:ok, state}
   end
 
-  def handle_message(message, _slack, state) do
+  def handle_event(_, _, state) do
     {:ok, state}
   end
 end
