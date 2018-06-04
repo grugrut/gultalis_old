@@ -8,9 +8,8 @@ defmodule Gultalis.Slack do
 
   def handle_event(message = %{type: "message"}, slack, state) do
     IO.puts message.text
-    if message.text == "Hi" do
-      send_message("Hello to you too!", message.channel, slack)
-    end
+    command = String.split(message.text, " ")
+    Gultalis.Action.hear(hd(command), message, slack)
     {:ok, state}
   end
 
