@@ -2,12 +2,12 @@ defmodule Gultalis.Slack do
   use Slack
 
   def handle_connect(slack, state) do
-    IO.puts "Connected as #{slack.me.name}"
+    IO.puts("Connected as #{slack.me.name}")
     {:ok, state}
   end
 
   def handle_event(message = %{type: "message"}, slack, state) do
-    IO.puts message.text
+    IO.puts(message.text)
     command = String.split(message.text, " ")
     Gultalis.Action.hear(hd(command), Enum.join(tl(command), " "), message, slack)
     {:ok, state}
@@ -17,4 +17,3 @@ defmodule Gultalis.Slack do
     {:ok, state}
   end
 end
-
