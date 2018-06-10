@@ -22,7 +22,8 @@ defmodule Gultalis.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:slack, "~> 0.13.0"}
+      {:slack, "~> 0.13.0"},
+      {:floki, "~> 0.20.2"}
     ]
   end
 end
