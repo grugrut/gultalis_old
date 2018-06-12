@@ -23,7 +23,9 @@ defmodule Gultalis.MixProject do
   defp deps do
     [
       {:slack, "~> 0.13.0"},
-      {:floki, "~> 0.20.2"}
+      {:floki, "~> 0.20.2"},
+      {:google_api_sheets, "~> 0.0.2"},
+      {:goth, "~> 0.7.0"}
     ]
   end
 end

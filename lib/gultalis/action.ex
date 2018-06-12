@@ -26,6 +26,23 @@ defmodule Gultalis.Action do
     Slack.Sends.send_message("https://tenki.jp/forecast/3/16/4410/13105/", message.channel, slack)
   end
 
+  def hear("ネタ", text, message, slack) do
+    connection = GoogleApi.Sheets.V4.Connection.new(System.get_env("GOOGLE_OAUTH_TOKEN"))
+
+    {:ok, _} =
+      GoogleApi.Sheets.V4.Api.Spreadsheets.sheets_spreadsheets_values_append(
+        connection,
+        System.get_env("GOOGLE_MATERIAL_SHEET_ID"),
+        "A1",
+        [
+          {:valueInputOption, "RAW"},
+          {:body, %GoogleApi.Sheets.V4.Model.ValueRange{values: [[text]]}}
+        ]
+      )
+
+    Slack.Sends.send_message(text <> "を登録しました", message.channel, slack)
+  end
+
   def hear(_, _, _, _) do
   end
 end
