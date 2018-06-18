@@ -13,3 +13,8 @@ jobs:
       - run: mix deps.get
       - run: mix format --check-formatted
       - run: mix test
+  deployment:
+    staging:
+      branch: master
+      heroku:
+        appname: gultalis
