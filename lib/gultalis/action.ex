@@ -1,14 +1,12 @@
 defmodule Gultalis.Action do
   use Slack
 
-  def hear("Hi", _, message, slack) do
-    IO.puts("Hi")
-    send_message("Hello to you too!", message.channel, slack)
+  def hear("hi", text, message, slack) do
+    spawn(Gultalis.Action.Hi, :hear, [text, message, slack])
   end
 
   def hear("echo", text, message, slack) do
-    IO.puts("echo")
-    send_message(text, message.channel, slack)
+    spawn(Gultalis.Action.Echo, :hear, [text, message, slack])
   end
 
   def hear("天気", _, message, slack) do
