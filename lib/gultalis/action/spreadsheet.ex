@@ -1,4 +1,9 @@
 defmodule Gultalis.Action.Spreadsheet do
+  if Mix.env() == :test do
+    @compile :export_all
+    @compile :nowarn_export_all
+  end
+
   use Slack
 
   defp getAccessToken do
