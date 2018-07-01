@@ -6,6 +6,6 @@ defmodule Gultalis.Action.SpreadsheetTest do
     assert HTTPoison.get!(
              "https://www.googleapis.com/oauth2/v3/tokeninfo?access_token=" <>
                Gultalis.Action.Spreadsheet.getAccessToken()
-           ).status_code == 404
+           ).status_code == 200
   end
 end
