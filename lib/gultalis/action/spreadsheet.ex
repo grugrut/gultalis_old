@@ -23,7 +23,8 @@ defmodule Gultalis.Action.Spreadsheet do
   end
 
   defp getConnection do
-    GoogleApi.Sheets.V4.Connection.new(getAccessToken())
+    getAccessToken()
+    |> GoogleApi.Sheets.V4.Connection.new()
   end
 
   def hear(text, message, slack) do
@@ -41,5 +42,3 @@ defmodule Gultalis.Action.Spreadsheet do
     send_message(text <> "を登録しました", message.channel, slack)
   end
 end
-
-# curl --data "refresh_token=$GOOGLE_REFRESH_TOKEN" --data "client_id=$GOOGLE_CLIENT_ID" --data "client_secret=$GOOGLE_CLIENT_SECRET" --data "grant_type=refresh_token" https://www.googleapis.com/oauth2/v4/token

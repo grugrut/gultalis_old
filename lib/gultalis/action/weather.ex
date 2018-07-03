@@ -1,15 +1,7 @@
-defmodule Gultalis.Action do
+defmodule Gultalis.Action.Weather do
   use Slack
 
-  def hear("hi", text, message, slack) do
-    spawn(Gultalis.Action.Hi, :hear, [text, message, slack])
-  end
-
-  def hear("echo", text, message, slack) do
-    spawn(Gultalis.Action.Echo, :hear, [text, message, slack])
-  end
-
-  def hear("天気", _, message, slack) do
+  def hear(_, message, slack) do
     IO.puts("天気")
     body = HTTPoison.get!("https://tenki.jp/forecast/3/16/4410/13105/").body
 
@@ -24,12 +16,5 @@ defmodule Gultalis.Action do
     |> send_message(message.channel, slack)
 
     send_message("https://tenki.jp/forecast/3/16/4410/13105/", message.channel, slack)
-  end
-
-  def hear("ネタ", text, message, slack) do
-    spawn(Gultalis.Action.Spreadsheet, :hear, [text, message, slack])
-  end
-
-  def hear(_, _, _, _) do
   end
 end

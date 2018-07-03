@@ -9,7 +9,7 @@ defmodule Gultalis.Slack do
   def handle_event(message = %{type: "message"}, slack, state) do
     IO.puts(message.text)
     command = String.split(message.text, " ")
-    Gultalis.Action.hear(hd(command), Enum.join(tl(command), " "), message, slack)
+    Gultalis.Router.hear(hd(command), Enum.join(tl(command), " "), message, slack)
     {:ok, state}
   end
 
