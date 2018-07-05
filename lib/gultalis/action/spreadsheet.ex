@@ -27,6 +27,17 @@ defmodule Gultalis.Action.Spreadsheet do
     |> GoogleApi.Sheets.V4.Connection.new()
   end
 
+  def hear("", message, slack) do
+    {:ok, range} =
+      GoogleApi.Sheets.V4.Api.Spreadsheets.sheets_spreadsheets_values_get(
+        getConnection(),
+        System.get_env("GOOGLE_MATERIAL_SHEET_ID"),
+        "A1"
+      )
+
+    range.values |> Enum.at(0) |> Enum.random() |> send_message(message.channel, slack)
+  end
+
   def hear(text, message, slack) do
     {:ok, _} =
       GoogleApi.Sheets.V4.Api.Spreadsheets.sheets_spreadsheets_values_append(
