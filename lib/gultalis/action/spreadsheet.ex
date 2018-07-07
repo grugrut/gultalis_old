@@ -7,20 +7,23 @@ defmodule Gultalis.Action.Spreadsheet do
   use Slack
 
   defp getAccessToken do
-    body =
-      HTTPoison.post!(
-        "https://www.googleapis.com/oauth2/v4/token",
-        {:form,
-         [
-           refresh_token: System.get_env("GOOGLE_REFRESH_TOKEN"),
-           client_id: System.get_env("GOOGLE_CLIENT_ID"),
-           client_secret: System.get_env("GOOGLE_CLIENT_SECRET"),
-           grant_type: "refresh_token"
-         ]}
-      ).body
-
-    Poison.decode!(body)["access_token"]
+    HTTPoison.post!(
+      "https://www.googleapis.com/oauth2/v4/token",
+      {:form,
+       [
+         refresh_token: System.get_env("GOOGLE_REFRESH_TOKEN"),
+         client_id: System.get_env("GOOGLE_CLIENT_ID"),
+         client_secret: System.get_env("GOOGLE_CLIENT_SECRET"),
+         grant_type: "refresh_token"
+       ]}
+    )
+    |> body
+    |> Poison.decode!()
+    |> access_token
   end
+
+  defp body(%{status_code: 200, body: json_body}), do: json_body
+  defp access_token(%{"access_token" => token}), do: token
 
   defp getConnection do
     getAccessToken()
@@ -28,14 +31,15 @@ defmodule Gultalis.Action.Spreadsheet do
   end
 
   def hear("", message, slack) do
-    {:ok, range} =
-      GoogleApi.Sheets.V4.Api.Spreadsheets.sheets_spreadsheets_values_get(
-        getConnection(),
-        System.get_env("GOOGLE_MATERIAL_SHEET_ID"),
-        "A1"
-      )
-
-    range.values |> Enum.at(0) |> Enum.random() |> send_message(message.channel, slack)
+    GoogleApi.Sheets.V4.Api.Spreadsheets.sheets_spreadsheets_values_get(
+      getConnection(),
+      System.get_env("GOOGLE_MATERIAL_SHEET_ID"),
+      "A1"
+    )
+    |> range_values
+    |> Enum.at(0)
+    |> Enum.random()
+    |> send_message(message.channel, slack)
   end
 
   def hear(text, message, slack) do
@@ -50,6 +54,9 @@ defmodule Gultalis.Action.Spreadsheet do
         ]
       )
 
-    send_message(text <> "を登録しました", message.channel, slack)
+    (text <> "を登録しました")
+    |> send_message(message.channel, slack)
   end
+
+  defp range_values({:ok, range}), do: range.values
 end
