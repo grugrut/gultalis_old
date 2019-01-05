@@ -13,6 +13,20 @@ defmodule Gultalis.Slack do
     {:ok, state}
   end
 
+  def handle_event(message = %{type: "reaction_added", reaction: "heart"}, slack, state) do
+    Slack.Web.Channels.history(
+      message.item.channel,
+      %{
+        token: slack.token,
+        inclusive: message.item.ts,
+        count: 1
+      }
+    )
+    |> IO.inspect()
+
+    {:ok, state}
+  end
+
   def handle_event(_, _, state) do
     {:ok, state}
   end
