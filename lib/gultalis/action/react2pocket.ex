@@ -5,12 +5,12 @@ defmodule Gultalis.Action.React2Pocket do
       {:form,
        [
          url:
-         message
-         |> Map.get("messages")
-         |> hd
-         |> Map.get("attachments")
-         |> hd
-         |> Map.get("original_url"),
+           message
+           |> Map.get("messages")
+           |> hd
+           |> Map.get("attachments")
+           |> hd
+           |> Map.get("original_url"),
          consumer_key: System.get_env("POCKET_CONSUMER_KEY"),
          access_token: System.get_env("POCKET_ACCESS_TOKEN")
        ]}
