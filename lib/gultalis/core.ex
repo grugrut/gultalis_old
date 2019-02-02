@@ -14,11 +14,14 @@ defmodule Gultalis.Slack do
   end
 
   def handle_event(message = %{type: "reaction_added", reaction: "heart"}, slack, state) do
+    IO.puts(message.item.ts)
+
     Slack.Web.Channels.history(
       message.item.channel,
       %{
         token: slack.token,
-        inclusive: message.item.ts,
+        latest: Float.to_string(String.to_float(message.item.ts) + 0.000001),
+        oldest: Float.to_string(String.to_float(message.item.ts) - 0.000001),
         count: 1
       }
     )
