@@ -1,5 +1,5 @@
 defmodule Gultalis.Action.React2Pocket do
-  def addPocket(message, slack) do
+  def addPocket(message, slack, item) do
     IO.puts(message |> extractOriginalUrl)
 
     HTTPoison.post!(
@@ -11,6 +11,8 @@ defmodule Gultalis.Action.React2Pocket do
          access_token: System.get_env("POCKET_ACCESS_TOKEN")
        ]}
     )
+
+    Slack.Web.Reactions.add("+1", %{token: slack.token, channel: item.channel, timestamp: item.ts})
   end
 
   defp extractOriginalUrl(message) do

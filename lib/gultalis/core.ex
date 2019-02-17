@@ -25,7 +25,7 @@ defmodule Gultalis.Slack do
         count: 1
       }
     )
-    |> Gultalis.Action.React2Pocket.addPocket(slack)
+    |> Gultalis.Action.React2Pocket.addPocket(slack, message.item)
 
     {:ok, state}
   end
